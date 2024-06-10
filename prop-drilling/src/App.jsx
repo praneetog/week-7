@@ -1,32 +1,72 @@
-import { useState } from "react"
+import { useContext, useState } from "react";
+import { CountContext } from "./context";
+
+/*
+
+        CountApp
+
+          Count       
+
+  Buttons     CountRender
+
+*/
 
 function App() {
   const [count, setCount] = useState(0);
-  
+
+  return (
+    //TODO : wrap anyone that wants to use the teleported value insdide a provider
+
+    <div>
+      <CountContext.Provider value={{count, setCount}}>
+        <Count />
+      </CountContext.Provider>
+    </div>
+  );
+}
+
+//! -----------------------------
+
+function Count() {
   return (
     <div>
-      <Count count={count} />
+      <CountRenderer />
       <Buttons />
     </div>
-  )
+  );
 }
 
-function Count({count}) {
-  return <div>
-    {count}
-  </div>
+//! -----------------------------
+
+function CountRenderer() {
+  const { count } = useContext(CountContext);
+  return <div>{count}</div>;
 }
+
+//! -----------------------------
 
 function Buttons() {
-  return <div>
-    <button onClick={() => {
+  const {count, setCount} = useContext(CountContext);
 
-    }}>Increase</button>
+  return (
+    <div>
+      <button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        Increase
+      </button>
 
-    <button onClick={() => {
-
-    }}>Decrease</button>
-  </div>
+      <button
+        onClick={() => {
+          setCount(count - 1);
+        }}
+      >
+        Decrease
+      </button>
+    </div>
+  );
 }
 
-export default App
+export default App;
