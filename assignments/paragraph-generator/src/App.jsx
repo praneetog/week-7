@@ -4,13 +4,20 @@ function App() {
   const [wordLength, setWordLength] = useState(0);
   const [paragraph, setParagraph] = useState('');
 
-  const generateParagraph = (length) => {
+  const fetchRandomWords = async (wordLength) => {
     const words = ['lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit'];
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += words[Math.floor(Math.random() * words.length)] + ' ';
+    try {
+      //fetch random word using api
+      const response = await fetch(`https://random-word-api.herokuapp.com/word?number=${ wordLength }`);
+      const words = await response.json();
+      return words.join(' ') + '.';
+    } catch (error) {
+      console.error('Error fetching random words:', error);
     }
-    setParagraph(result.trim() + '.');
+  };
+  const generateParagraph = async (wordLength) => {
+    const randomParagraph = await fetchRandomWords(wordLength);
+    setParagraph(randomParagraph);
   };
 
   return (
